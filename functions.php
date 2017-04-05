@@ -1,4 +1,58 @@
 <?php
+include_once  __DIR__.'/compress.php';
+
+function callback($buffer) {
+    if ( !is_user_logged_in()) {
+        $buffer = getCompressedOutPut($buffer);
+    }
+    $buffer = getCompressedOutPut($buffer);
+    return $buffer;
+}
+
+add_action('template_redirect', 'foo_buffer_go', 0);
+function foo_buffer_go(){
+    ob_start('callback');
+}
+
+add_action('shutdown', 'foo_buffer_stop', 1000);
+function foo_buffer_stop(){
+    ob_end_flush();
+}
+
+// Disable W3TC footer comment for all users
+add_filter( 'w3tc_can_print_comment', '__return_false', 10, 1 );
+
+
+function remove_head_scripts() {
+    remove_action('wp_head', 'wp_print_scripts');
+    remove_action('wp_head', 'wp_print_head_scripts', 9);
+    remove_action('wp_head', 'wp_enqueue_scripts', 1);
+
+    add_action('wp_footer', 'wp_print_scripts', 5);
+    add_action('wp_footer', 'wp_enqueue_scripts', 5);
+    add_action('wp_footer', 'wp_print_head_scripts', 5);
+}
+add_action( 'wp_enqueue_scripts', 'remove_head_scripts' );
+
+
+
+add_filter('gettext', 'change_howdy', 10, 3);
+
+function change_howdy($translated, $text, $domain) {
+
+    if (!is_admin() || 'default' != $domain)
+        return $translated;
+
+    if (false !== strpos($translated, 'Howdy'))
+        return str_replace('Howdy', 'Welcome', $translated);
+
+    return $translated;
+}
+
+
+
+
+
 function getPostViews($postID){
     $count_key = 'post_views_count';
     $count = get_post_meta($postID, $count_key, true);
