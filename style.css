@@ -1,0 +1,20 @@
+/* 
+Theme Name: vrkansagara
+Theme URI: https://www.vrkansagara.in
+Description: Responsive vrkansagara Theme
+Template: responsive-mobile
+Version: 1.0.0
+Author: Vallabh Kansagara (vrkansagara)
+Author URI: https://www.vrkansagara.in
+License: BSD3-Clause
+License URI: license.txt
+
+*/
+
+/* =Start From Here
+-------------------------------------------------------------- */
+
+#logo img {
+max-width: 960px;
+width: 100%;
+}
